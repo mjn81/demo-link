@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
 import { BaseError } from "../errors";
+import { userAuth } from "../helpers";
 import { Room, User } from "../models";
 
 export class RoomController {
@@ -48,9 +49,8 @@ export class RoomController {
   }
 
   public async getRooms(req: Request, res: Response) {
-    const { username } = req.body;
-    if (!username) throw new BaseError("Username is required", 400);
-    const user = await User.findOne({ username });
+    const { id } = await userAuth(req.user);
+    const user = await User.findOne({ _id: id });
     if (!user) throw new BaseError("User not found", 404);
     const rooms = await Room.find({ recipients: user._id });
     return res.status(200).json({ rooms });

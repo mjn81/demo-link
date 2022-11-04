@@ -11,5 +11,5 @@ export const errorHandlingMiddleware = (
 	if (err instanceof BaseError) {
 		return res.status(err.getCode()).json({ message: err.message });
 	}
-	return res.status(500).json({ message: err.message });
+	return res.status(500).json({ message: 'oops something went wrong!' });
 };

@@ -10,10 +10,23 @@ import {
   userRouter,
   roomRouter,
 } from "./routes";
-import { errorHandlingMiddleware } from "./middlewares";
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
+import {
+  errorHandlingMiddleware,
+  userAuthMiddleware,
+  corsMiddleware,
+} from "./middlewares";
+
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string;
+        username: string;
+      };
+    }
+  }
+}
 
 config({
   path:
@@ -25,20 +38,29 @@ config({
 const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
 const main = async () => {
+  const app = express();
+  const server = http.createServer(app);
+  const io = new Server(server);
+
+  app.disable("x-powered-by");
+  app.use(corsMiddleware);
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-	if(!MONGO_URL) throw new Error('MONGO_URL is not defined in .env file');
- 
-	mongoose.connect(MONGO_URL, () => {
+  if (!MONGO_URL) throw new Error("MONGO_URL is not defined in .env file");
+
+  mongoose.connect(MONGO_URL, () => {
     console.log("mongodb connected");
   });
+
+  app.use(userAuthMiddleware);
 
   app.use("/auth", authRouter);
   app.use("/playground", playgroundRouter);
   app.use("/user", userRouter);
   app.use("/room", roomRouter);
-  
-	app.use(errorHandlingMiddleware);
+
+  app.use(errorHandlingMiddleware);
 
   io.on("connection", (socket) => {
     console.log("a user connected");
