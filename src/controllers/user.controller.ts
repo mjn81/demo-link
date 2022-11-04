@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { userAuth } from "../helpers";
 import { User } from "../models";
 
 export class UserController {
@@ -18,8 +19,14 @@ export class UserController {
   }
 
   public async getUsers(req: Request, res: Response) {
+    await userAuth(req.user);
     const users = await User.find();
     return res.status(200).json({ users });
+  }
+
+  public async getProfile(req: Request, res: Response) {
+    const user = await userAuth(req.user);
+    return res.status(200).json({ user });
   }
 }
 

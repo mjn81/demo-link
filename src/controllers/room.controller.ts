@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { BaseError } from "../errors";
 import { userAuth } from "../helpers";
+import { IAddRecipientDto, IRoom } from "../interfaces";
 import { Room, User } from "../models";
 
 export class RoomController {
@@ -21,12 +22,9 @@ export class RoomController {
   }
 
   public async createSelfRoom(req: Request, res: Response) {
-    const { username } = req.body;
-    if (!username) throw new BaseError("Username is required", 400);
-    const user = await User.findOne({ username });
-    if (!user) throw new BaseError("User not found", 404);
+    const user = await userAuth(req.user);
     const room = await Room.create({
-      name: username,
+      name: user.username,
       recipients: [user._id],
       isConv: true,
     });
@@ -34,11 +32,12 @@ export class RoomController {
   }
 
   public async createRoom(req: Request, res: Response) {
+    await userAuth(req.user);
     const {
       name,
       recipients,
       isConv,
-    }: { name: string; recipients: []; isConv: boolean } = req.body;
+    }: IRoom = req.body;
     if (!name) throw new BaseError("Room name is required", 400);
     if (!recipients.length)
       throw new BaseError("Recipients are required", 400);
@@ -49,20 +48,16 @@ export class RoomController {
   }
 
   public async getRooms(req: Request, res: Response) {
-    const { id } = await userAuth(req.user);
-    const user = await User.findOne({ _id: id });
+    const user = await userAuth(req.user);
     if (!user) throw new BaseError("User not found", 404);
     const rooms = await Room.find({ recipients: user._id });
     return res.status(200).json({ rooms });
   }
 
   public async getRoomsByName(req: Request, res: Response) {
+    await userAuth(req.user);
     const { name: roomName } = req.query;
-    const { username } = req.body;
-    if (!username) throw new BaseError("Username is required", 400);
     if (!roomName) throw new BaseError("Room name is required", 400);
-    const user = await User.findOne({ username });
-    if (!user) throw new BaseError("User not found", 404);
     const rooms = await Room.find({
       name: { $regex: roomName, $options: "i" },
       isConv: false,
@@ -72,8 +67,9 @@ export class RoomController {
   }
 
   public async addRecipient(req: Request, res: Response) {
+    await userAuth(req.user);
     const { id: roomId } = req.params;
-    const { recipients }: { recipients: string[] } = req.body;
+    const { recipients }: IAddRecipientDto = req.body;
     if (!roomId) throw new BaseError("Room id is required", 400);
     if (!recipients) throw new BaseError("Recipient id is required", 400);
     const room = await Room.findById(roomId);
@@ -87,8 +83,9 @@ export class RoomController {
   }
 
   public async removeRecipient(req: Request, res: Response) {
+    await userAuth(req.user);
     const { id: roomId } = req.params;
-    const { recipients } = req.body;
+    const { recipients }: IAddRecipientDto = req.body;
     if (!roomId) throw new BaseError("Room id is required", 400);
     if (!recipients) throw new BaseError("Recipient id is required", 400);
     const room = await Room.findById(roomId);
@@ -101,6 +98,7 @@ export class RoomController {
   }
 
   public async changeRoomName(req: Request, res: Response) {
+    await userAuth(req.user);
     const { id: roomId } = req.params;
     const { name } = req.body;
     if (!roomId) throw new BaseError("Room id is required", 400);
@@ -113,6 +111,7 @@ export class RoomController {
   }
 
   public async getAllRooms(req: Request, res: Response) {
+    await userAuth(req.user);
     const rooms = await Room.find();
     return res.status(200).json({ rooms });
   }
