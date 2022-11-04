@@ -22,7 +22,7 @@ class AuthController {
     return AuthController._instance;
   }
 
-  public async register(req: Request, res: Response) {
+  public register = async (req: Request, res: Response) => {
     const { username, password }: IAuthDTO = req.body;
     if (!username) throw new BaseError("Username is required", 400);
     const fuser = await User.findOne({ username });
@@ -31,12 +31,12 @@ class AuthController {
     const user = await User.create({
       username,
       password: hPassword,
-		});
-		const token = this._generateToken(user.username, user._id);
+    });
+    const token = this._generateToken(user.username, user._id);
     return res.status(201).json({ token });
-  }
+  };
 
-  public async login(req: Request, res: Response) {
+  public login = async (req: Request, res: Response) => {
     const { username, password }: IAuthDTO = req.body;
     if (!username) throw new BaseError("Username is required", 400);
     const user = await User.findOne({ username });
@@ -50,14 +50,14 @@ class AuthController {
     return res.status(200).json({
       token,
     });
-  }
+  };
 
   private async _hashPassword(password: string) {
     return await hash(password);
   }
 
   private async _verifyPassword(password: string, hash: string) {
-    return await verify(password, hash);
+    return await verify(hash, password);
   }
 
   private _generateToken(username: string, id: string) {

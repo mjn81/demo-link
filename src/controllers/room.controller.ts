@@ -33,11 +33,7 @@ export class RoomController {
 
   public async createRoom(req: Request, res: Response) {
     await userAuth(req.user);
-    const {
-      name,
-      recipients,
-      isConv,
-    }: IRoom = req.body;
+    const { name, recipients, isConv }: IRoom = req.body;
     if (!name) throw new BaseError("Room name is required", 400);
     if (!recipients.length)
       throw new BaseError("Recipients are required", 400);
@@ -47,9 +43,9 @@ export class RoomController {
     return res.status(200).json({ room });
   }
 
-  public async getRooms(req: Request, res: Response) {
+  public async getMyRooms(req: Request, res: Response) {
     const user = await userAuth(req.user);
-    if (!user) throw new BaseError("User not found", 404);
+
     const rooms = await Room.find({ recipients: user._id });
     return res.status(200).json({ rooms });
   }
