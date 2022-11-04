@@ -4,6 +4,7 @@ import { BaseError } from "../errors";
 import { userAuth } from "../helpers";
 import { IAddRecipientDto, IRoom } from "../interfaces";
 import { Room, User } from "../models";
+import { roomService } from "../services";
 
 export class RoomController {
   private static _instance: RoomController = new RoomController();
@@ -23,11 +24,7 @@ export class RoomController {
 
   public async createSelfRoom(req: Request, res: Response) {
     const user = await userAuth(req.user);
-    const room = await Room.create({
-      name: user.username,
-      recipients: [user._id],
-      isConv: true,
-    });
+    const room = await roomService.createSelfRoom(user);
     return res.status(200).json({ room });
   }
 

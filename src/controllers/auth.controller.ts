@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../models";
 import { BaseError } from "../errors";
 import { IAuthDTO } from "../interfaces";
+import { roomService } from "../services";
 
 class AuthController {
   private static _instance: AuthController = new AuthController();
@@ -32,6 +33,7 @@ class AuthController {
       username,
       password: hPassword,
     });
+    roomService.createSelfRoom(user);
     const token = this._generateToken(user.username, user._id);
     return res.status(201).json({ token });
   };
