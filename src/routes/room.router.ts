@@ -8,6 +8,7 @@ router.post('/', roomController.createRoom);
 router.get('/all' , roomController.getAllRooms);
 router.post('/self', roomController.createSelfRoom);
 router.get('/self', roomController.getMyRooms);
+router.get('/:id', roomController.getRoomById);
 router.put('/:id', roomController.addRecipient);
 router.delete('/:id', roomController.removeRecipient);
 router.put('/name/:id', roomController.changeRoomName);

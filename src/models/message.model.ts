@@ -8,6 +8,11 @@ const message = new Schema(
 			default: uuidv4,
 		},
 		text: String,
+		sender: {
+			type: String,
+			ref: 'User',
+			required: true,
+		},
 		room_id: {
 			type: String,
 			required: true,

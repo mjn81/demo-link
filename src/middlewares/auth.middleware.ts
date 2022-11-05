@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 import { BaseError } from "../errors";
+import { extractToken } from "../helpers";
 import { IUserPayload } from "../interfaces";
 
 export const userAuthMiddleware = async (
@@ -11,15 +12,11 @@ export const userAuthMiddleware = async (
 ) => {
   const token = req.headers?.authorization;
   if (!token) return next();
-
-  const bearer = token?.split(" ") as string[];
-
-  if (!bearer[1] || bearer[0] !== "Token")
-    throw new BaseError("Invalid Auth", 401);
+  const [bearer , tokenValue]= extractToken(token);
 
   if (!process.env.JWT_SECRET) throw new Error("JWT Secret not found");
   const payload: IUserPayload = jwt.verify(
-    bearer[1],
+    tokenValue,
     process.env.JWT_SECRET
   ) as IUserPayload;
   if (!payload) return next();

@@ -103,6 +103,15 @@ export class RoomController {
     return res.status(200).json({ message: "room name changed." });
   }
 
+  public async getRoomById(req: Request, res: Response) {
+    const user = await userAuth(req.user);
+    const { id: roomId } = req.params;
+    if (!roomId) throw new BaseError("Room id is required", 400);
+    const room = await Room.findById(roomId).populate("recipients");
+    if (!room) throw new BaseError("Room not found", 404);
+    return res.status(200).json(room);
+  }
+
   public async getAllRooms(req: Request, res: Response) {
     await userAuth(req.user);
     const rooms = await Room.find();

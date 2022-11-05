@@ -16,6 +16,7 @@ import {
   corsMiddleware,
 } from "./middlewares";
 
+import { chatSocket, socketAuthMiddleware } from "./realtime";
 
 declare global {
   namespace Express {
@@ -40,7 +41,12 @@ const MONGO_URL = process.env.MONGO_URL;
 const main = async () => {
   const app = express();
   const server = http.createServer(app);
-  const io = new Server(server);
+  const io = new Server(server, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+    },
+  });
 
   app.disable("x-powered-by");
   app.use(corsMiddleware);
@@ -62,11 +68,10 @@ const main = async () => {
 
   app.use(errorHandlingMiddleware);
 
-  io.on("connection", (socket) => {
-    console.log("a user connected");
-  });
+  io.use(socketAuthMiddleware)
+  chatSocket(io);
 
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
   });
 };
