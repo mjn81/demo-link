@@ -7,12 +7,16 @@ import { useSocketStore, useMessageStore } from 'context';
 import { useRoomHistoryQuery } from 'hooks';
 
 export const ChatContent = ({ currentContact }: { currentContact: IContact }) => {
-  const { data: details, isLoading: isLoadingDetails } = useContactDetailQuery(currentContact.id);
+  const { data: details, isLoading: isLoadingDetails } = useContactDetailQuery(
+    currentContact.id,
+  );
   const socket = useSocketStore(state => state.socket);
   const chat = useMessageStore(state => state.chat);
   const setHistory = useMessageStore(state => state.setHistory);
   const addMessage = useMessageStore(state => state.addMessage);
-  const { data: history, isLoading: isLoadingHistory } = useRoomHistoryQuery(currentContact.id);
+  const { data: history, isLoading: isLoadingHistory } = useRoomHistoryQuery(
+    currentContact.id,
+  );
   useEffect(() => {
     if (isLoadingHistory) return;
     setHistory(history);

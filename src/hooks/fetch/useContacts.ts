@@ -7,7 +7,8 @@ export const useContactsQuery = () => {
 };
 
 export const useContactDetailQuery = (contactId: string) => {
-  return useQuery<IGetContactDetailRes, IBaseError>(['member-contact-list', contactId], () =>
-    getContactDetail(contactId),
+  return useQuery<IGetContactDetailRes, IBaseError>(
+    ['member-contact-list', contactId],
+    () => getContactDetail(contactId),
   );
 };
