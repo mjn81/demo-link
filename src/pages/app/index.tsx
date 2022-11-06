@@ -3,11 +3,11 @@ import { Route, Routes } from 'react-router-dom';
 import Chat from './Chat';
 
 const AppRouter = () => {
-	return (
-		<Routes>
-			<Route path="chat" element={<Chat />} />
-		</Routes>
-	);
+  return (
+    <Routes>
+      <Route path="chat" element={<Chat />} />
+    </Routes>
+  );
 };
 
 export default AppRouter;

@@ -5,8 +5,8 @@
 @import 'core';
 @import 'menu';
 * {
-	font-family: 'Poppins', sans-serif;
-	font-weight: 300;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
 }
 
 @import 'login';
@@ -14,10 +14,10 @@
 @import 'sidebar';
 @import 'nav';
 .tag-demo {
-	position: absolute;
-	top: 5px;
-	left: 5px;
-	font-weight: 500;
-	font-size: 0.9rem;
-	color: $primary;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: $primary;
 }

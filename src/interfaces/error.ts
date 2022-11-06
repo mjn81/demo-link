@@ -1,3 +1,3 @@
 export interface IBaseError {
-  message: string
+  message: string;
 }

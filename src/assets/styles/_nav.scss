@@ -6,12 +6,11 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  
+
   .sidenav__profile {
     position: relative;
-    
 
-     .context-menu .profile-item {
+    .context-menu .profile-item {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -20,10 +19,10 @@
       }
 
       .context-menu li.logout {
-        &:hover{
-          color:$error;
+        &:hover {
+          color: $error;
         }
       }
-    } 
+    }
   }
 }

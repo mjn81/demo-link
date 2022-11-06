@@ -1,43 +1,43 @@
 .sidebar {
-	width: 350px;
-	height: 100%;
-	padding: 1.5rem 2rem;
-	border-right: 1px solid $grey;
+  width: 350px;
+  height: 100%;
+  padding: 1.5rem 2rem;
+  border-right: 1px solid $grey;
 }
 
 .sidebar .title {
-	font-weight: 600;
-	font-size: 2rem;
-	color: $black;
+  font-weight: 600;
+  font-size: 2rem;
+  color: $black;
 }
 
 .sidebar__title-container {
-	margin: 1.5rem 0;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+  margin: 1.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .sidebar__title-container button.plain {
-	font-size: 1.6rem;
-	color: $dark_grey;
+  font-size: 1.6rem;
+  color: $dark_grey;
 }
 
 .sidebar__search {
-	margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .sidebar__contact {
-	padding: 1rem 0;
-	cursor: pointer;
-	border-bottom: 0.02rem solid $grey;
+  padding: 1rem 0;
+  cursor: pointer;
+  border-bottom: 0.02rem solid $grey;
 }
 
 .sidebar__contact-info {
-	.name {
-		font-weight: 600;
-		font-size: 1.2rem;
-		color: $black;
-		text-transform: capitalize;
-	}
+  .name {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: $black;
+    text-transform: capitalize;
+  }
 }

@@ -1,9 +1,7 @@
 import create from 'zustand';
 import { ISocketState } from 'interfaces';
 
-
-
-export const useSocketStore = create<ISocketState>((set) => ({
+export const useSocketStore = create<ISocketState>(set => ({
   socket: null,
-  setSocket: (socket) => set({ socket }),
+  setSocket: socket => set({ socket }),
 }));

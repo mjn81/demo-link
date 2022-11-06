@@ -1,0 +1,13 @@
+node_modules
+package.json
+package-lock.json
+README.md
+tsconfig.json
+yarn.lock
+vite.config.ts
+tsconfig.node.json
+.gitignore
+.env
+.git
+.env.*
+*.html

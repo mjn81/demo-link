@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export const useCountMember = (members: any) => {
   const [count, setCount] = useState(0);
@@ -7,11 +7,9 @@ export const useCountMember = (members: any) => {
     const c = members.length;
     if (c > 6) {
       setCount(7);
-    }
-    else {
+    } else {
       setCount(c);
     }
-    
   }, [members]);
   return count;
-}
+};
