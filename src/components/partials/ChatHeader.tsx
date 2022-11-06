@@ -3,6 +3,7 @@ import { useCountMember } from 'hooks';
 import { IRecipient } from 'interfaces';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ButtonProfile, SimpleProfile } from 'components/core';
 
 export const ChatHeader = ({ recipients }: { recipients: IRecipient[] }) => {
   const lastMember = useCountMember(recipients);
@@ -10,24 +11,24 @@ export const ChatHeader = ({ recipients }: { recipients: IRecipient[] }) => {
   return (
     <section className="chat-members">
       {recipients.map((member, index) => (
-        <div
+        <SimpleProfile
           className="member"
+          name={member.username}
           style={{
             right: `${index * 30}px`,
           }}
           key={member._id}
-        >
-          {member.username[0].toUpperCase()}
-        </div>
+        />
       ))}
-      <button
-        className="member text-primary"
+      <ButtonProfile
+        onClick={() => console.log('add member')}
+        className="member"
         style={{
           right: `${lastMember * 30}px`,
         }}
       >
-        <FontAwesomeIcon icon={faPlus} />
-      </button>
+        <FontAwesomeIcon className="text-primary" icon={faPlus} />
+      </ButtonProfile>
     </section>
   );
 };

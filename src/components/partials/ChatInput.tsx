@@ -20,8 +20,8 @@ export const ChatInput = ({
   const [rows, setRows] = useState<number>(1);
   const sender = useUserStore(state => state.id);
   const addMessage = useMessageStore(state => state.addMessage);
-  console.log('recipients', recipients);
   const handleSendMessage = () => {
+    if(!message) return;
     socket.emit('send-message', { roomId, message, sender, recipients });
     addMessage({ sender, message });
     setMessage('');

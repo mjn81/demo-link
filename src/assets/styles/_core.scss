@@ -66,9 +66,9 @@ button {
   }
   &.circle {
     border-radius: 50%;
-    width: 3rem;
-    height: 3rem;
-    border: 1px solid $grey;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
     padding: 0;
     text-align: center;
   }
@@ -84,4 +84,14 @@ a.button {
   text-align: center;
   padding: $basic_padding;
   border-radius: $basic_radius;
+}
+
+.profile {
+  border-radius: 50%;
+  background-color: white;
+  border: 1px solid $grey;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.4rem;
+  text-align: center;
 }

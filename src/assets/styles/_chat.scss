@@ -2,20 +2,29 @@
   width: 100vw;
   height: 100vh;
   display: flex;
-  background-color: $white;
+  background-color: white;
 }
 
 .chat-container {
   flex-grow: 1;
+
+  background-color: $white;
+}
+.chat-area {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow-y: scroll;
 }
 
-.chat-container header.chat-header {
-  padding: 2rem;
+.chat-area header.chat-header {
   display: flex;
+  padding: 15px 2rem;
+  height: 70px;
   justify-content: space-between;
   align-items: center;
+  background-color: white;
+  border-bottom: 1px solid $grey;
   .title {
     text-transform: capitalize;
     font-weight: 500;
@@ -30,44 +39,48 @@
       top: 50%;
       transform: translateY(-50%);
       position: absolute;
-      border-radius: 50%;
-      background-color: white;
-      border: 1px solid $grey;
-      width: 3rem;
-      height: 3rem;
-      padding: 0.6rem;
-      text-align: center;
     }
   }
 }
 
-.chat-container .chat-content {
+.chat-area .chat-content {
   flex-grow: 1;
-  overflow-y: hidden;
-  padding: 2rem;
+  
+  padding: 1rem 1rem 0 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
   .message {
-    display: flex;
-    margin-bottom: 1rem;
-    .message-content {
-      padding: 1rem;
-      border-radius: 1rem;
-      background-color: $grey;
-      color: $white;
-      font-size: 1.2rem;
-      font-weight: 500;
-      max-width: 80%;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background-color: white;
+    width: fit-content;
+    color: $black;
+    border-radius: $basic_radius;
+    &.me {
+      background-color: $primary;
+      color: white;
+      align-self: flex-end;
+    }
+
+    .sender {
+      // margin-bottom: 0.1rem;
+      font-size: 0.7rem;
+      font-weight: 300;
     }
   }
 }
 
-.chat-container .chat-input {
-  // padding: 1rem 2rem;
+.chat-area .chat-input {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: white;
   border-radius: $basic_radius;
-  margin: 1rem 2rem;
+  margin: 1rem;
   padding: 0.5rem;
   textarea {
     overflow: hidden;

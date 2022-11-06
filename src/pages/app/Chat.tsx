@@ -22,9 +22,10 @@ const Chat = () => {
   }, [token]);
   return (
     <div className="chat">
-      <Sidenav />
       <Sidebar />
-      {contact && <ChatContent currentContact={contact} />}
+      <section className="chat-container">
+        {contact && <ChatContent currentContact={contact} />}
+      </section>
     </div>
   );
 };
