@@ -1,0 +1,58 @@
+span.triangle {
+	position: absolute;
+	top: 50%;
+  z-index: 5;
+	transform: translateY(-50%);
+	left: 100%;
+	width: 0;
+	height: 0;
+	border-top: 0.75rem solid transparent;
+	border-bottom: 0.75rem solid transparent;
+	border-right: 0.75rem solid $grey;
+	&::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		left: 0.08rem;
+		width: 0;
+		height: 0;
+		border-top: 0.7rem solid transparent;
+		border-bottom: 0.7rem solid transparent;
+
+		border-right: 0.7rem solid white;
+	}
+}
+
+ul.context-menu {
+	outline: 1px solid $grey;
+	border-radius: $basic_radius;
+	position: absolute;
+  z-index: 4;
+	
+	padding: 5px;
+	left: calc(100% + 0.75rem);
+	background-color: white;
+	width: fit-content;
+
+	&.bottom {
+		bottom: 0.2rem;
+	}
+
+	> li.menu-item {
+		transition: background-color 0.2s ease-in-out;
+		border-radius: $basic_radius;
+		
+
+    &:hover {
+			background-color: $light_grey;
+		}
+
+		> button {
+      color: $black;
+			background-color: transparent;
+			border: none;
+			padding: 0.25rem 1.5rem;
+		}
+	}
+}

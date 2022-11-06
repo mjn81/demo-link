@@ -1,0 +1,87 @@
+input {
+	width: 100%;
+	padding: $basic_padding;
+	font-size: 1rem;
+	border: none;
+	background-color: $white;
+	border-radius: $basic_radius;
+	font-weight: 500;
+	color: $black;
+	outline: none !important;
+	::placeholder {
+		color: $grey;
+	}
+	&.secondary {
+		background-color: $grey;
+		::placeholder {
+			color: $dark_grey;
+		}
+		color: $black;
+		outline: none;
+	}
+}
+
+button {
+	padding: $basic_padding;
+	cursor: pointer;
+	font-weight: 500;
+	font-size: 1rem;
+	display: block;
+	border-radius: $basic_radius;
+	width: 100%;
+	& > a {
+		color: $primary;
+	}
+	&.primary {
+		background-color: $primary;
+		color: $white;
+		border: none;
+		outline: none;
+	}
+	&.secondary {
+		background-color: $white;
+		color: $primary;
+		border: 1.5px solid $grey;
+	}
+	&.icon-button {
+		padding: 0;
+		background-color: white;
+		border: none;
+		color: $black;
+		display: flex;
+		align-items: center;
+		box-shadow: 0 0 2px 0px $grey;
+		& > .icon {
+			color: $primary;
+			font-size: 1rem;
+			border-right: 1px solid $white;
+			padding: 1.1rem;
+			margin-right: 2.5rem;
+		}
+	}
+	&.plain {
+		border: none;
+		background-color: transparent;
+		padding: 0;
+	}
+	&.circle {
+		border-radius: 50%;
+		width: 3rem;
+		height: 3rem;
+		border: 1px solid $grey;
+		padding: 0;
+		text-align: center;
+	}
+}
+a.button {
+	color: $primary;
+	font-weight: 500;
+	font-size: 1rem;
+	background-color: $white;
+	border: 1.5px solid $grey;
+	display: block;
+	width: 100%;
+	text-align: center;
+	padding: $basic_padding;
+	border-radius: $basic_radius;
+}

@@ -1,0 +1,29 @@
+.sidenav {
+  display: flex;
+  padding: 0.5rem;
+  background-color: white;
+  border-right: 1px solid $grey;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  
+  .sidenav__profile {
+    position: relative;
+    
+
+     .context-menu .profile-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      > .icon {
+        margin-left: 0.5rem;
+      }
+
+      .context-menu li.logout {
+        &:hover{
+          color:$error;
+        }
+      }
+    } 
+  }
+}

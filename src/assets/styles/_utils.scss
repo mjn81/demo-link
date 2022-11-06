@@ -1,0 +1,47 @@
+.capitalize {
+	text-transform: capitalize;
+}
+
+.inline-block {
+	display: inline-block;
+}
+
+.w-fit {
+	width: fit-content;
+}
+
+.font-bold {
+	font-weight: 500;
+}
+
+.font-sm {
+	font-size: small;
+}
+.font-lg {
+	font-size: large;
+}
+.font-xl {
+	font-size: larger;
+}
+.font-xxl {
+	font-size: x-large;
+}
+.font-xs {
+	font-size: x-small;
+}
+
+.text-red {
+  color: $error;
+}
+
+.text-primary {
+	color: $primary;
+}
+
+.hidden {
+	display: none;
+}
+
+.visible {
+	display: block;
+}
