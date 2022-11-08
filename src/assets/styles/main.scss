@@ -4,6 +4,7 @@
 @import 'utils';
 @import 'core';
 @import 'menu';
+@import 'nav';
 * {
   font-family: 'IBM Plex Sans', sans-serif;
   font-weight: medium;
@@ -12,7 +13,6 @@
 @import 'login';
 @import 'chat';
 @import 'sidebar';
-@import 'nav';
 .tag-demo {
   position: absolute;
   top: 5px;

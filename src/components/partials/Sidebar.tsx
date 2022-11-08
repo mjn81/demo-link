@@ -9,7 +9,7 @@ import {
 
 import { useContactsQuery, useModal } from 'hooks';
 import { useContactStore } from 'context';
-import { ButtonProfile, SimpleProfile, MenuOption, ContextMenu, Modal } from 'components';
+import { MenuOption, ContextMenu, Modal } from 'components';
 import { useClearToken, useProfileQuery } from 'hooks';
 
 const ADD_GROUP_MODAL = 'add-group-modal';
@@ -39,10 +39,10 @@ export const Sidebar = () => {
     <section className="sidebar">
       <section className="self">
         <section className="avatar">
-          <ButtonProfile
+          {/* <ButtonProfile
             onClick={() => setIsOpen(o => !o)}
             name={profile?.user.username}
-          />
+          /> */}
           <ContextMenu prefix="prf" type="bottom" isOpen={isOpen} options={profileOpts} />
         </section>
         <section className="text">
@@ -76,7 +76,7 @@ export const Sidebar = () => {
             }}
           >
             <div className="sidebar__contact-info">
-              <SimpleProfile name={contact.name} />
+              {/* <SimpleProfile name={contact.name} /> */}
               <h3 className="name">{contact.name}</h3>
             </div>
           </div>

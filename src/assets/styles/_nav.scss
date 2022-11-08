@@ -1,27 +1,46 @@
 .sidenav {
+  padding: 10px;
   display: flex;
-  padding: 0.5rem;
-  background-color: white;
+  background-color: $grey;
   border-right: 1px solid $grey;
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
 
-  .sidenav__profile {
-
-    .context-menu .profile-item {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      > .icon {
-        margin-left: 0.5rem;
+  .menu {
+    & > li {
+      margin-bottom: 0.8rem;
+      cursor: pointer;
+      &:last-child {
+        margin-bottom: 0;
       }
 
-      .context-menu li.logout {
+      img {
+        padding: 13px;
+        border-radius: $basic_radius;
+        transition: all ease-in-out 250ms;
+
         &:hover {
-          color: $error;
+          background-color: $background;
+        }
+        &.active {
+          background-color: $background;
         }
       }
     }
+  }
+
+  .profile {
+    background-color: white;
+    border-radius: $basic_radius;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 500;
   }
 }
