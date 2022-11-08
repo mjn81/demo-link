@@ -1,69 +1,29 @@
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faMagnifyingGlass,
-  faP,
-  faPlus,
-  faRightFromBracket,
-} from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
 
-import { useContactsQuery, useModal } from 'hooks';
+import { useContactsQuery } from 'hooks';
 import { useContactStore } from 'context';
-import { MenuOption, ContextMenu, Modal } from 'components';
-import { useClearToken, useProfileQuery } from 'hooks';
 
-const ADD_GROUP_MODAL = 'add-group-modal';
+import SearchSvg from 'assets/icons/search.svg';
+import { Input } from 'components/core';
+
+const TEST_STRING =
+  'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus, velit nam voluptas nisi repellendus deserunt neque possimus earum id dolorum a sint cumque modi ducimus in natus repudiandae iste voluptatibus!';
 
 export const Sidebar = () => {
   const { data: contacts, isLoading } = useContactsQuery();
-  const { data: profile } = useProfileQuery();
-  const logout = useClearToken();
-  const profileOpts: MenuOption[] = [
-    {
-      onClick: logout,
-      children: (
-        <span className="profile-item capitalize">
-          logout
-          <FontAwesomeIcon className="icon" icon={faRightFromBracket} />
-        </span>
-      ),
-      extraClass: 'logout',
-    },
-  ];
-  const [isOpen, setIsOpen] = useState(false);
-  const { modalId, closeModal, openModal } = useModal();
-
   const setContact = useContactStore(state => state.setContact);
   const currentContact = useContactStore(state => state.contact);
   return (
     <section className="sidebar">
-      <section className="self">
-        <section className="avatar">
-          {/* <ButtonProfile
-            onClick={() => setIsOpen(o => !o)}
-            name={profile?.user.username}
-          /> */}
-          <ContextMenu prefix="prf" type="bottom" isOpen={isOpen} options={profileOpts} />
-        </section>
-        <section className="text">
-          <h4 className="time">Good Morning</h4>
-          <h1 className="name capitalize">{profile?.user.username}</h1>
-        </section>
-        <section className="more">
-          <button className="search circle" onClick={() => openModal(ADD_GROUP_MODAL)}>
-            <FontAwesomeIcon icon={faPlus} />
-          </button>
-          <button className="search circle">
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </button>
-        </section>
+      <section className="search">
+        <Input icon={SearchSvg} placeholder="Search..." />
       </section>
       <section className="sidebar__contacts">
         {isLoading && <p>Loading...</p>}
         {contacts?.rooms.map(contact => (
           <div
             className={`sidebar__contact ${
-              currentContact?.id === contact._id && 'active'
+              currentContact?.id === contact._id ? 'active' : ''
             }`}
             key={contact._id}
             onClick={() => {
@@ -75,19 +35,17 @@ export const Sidebar = () => {
               });
             }}
           >
-            <div className="sidebar__contact-info">
-              {/* <SimpleProfile name={contact.name} /> */}
-              <h3 className="name">{contact.name}</h3>
+            <div className="profile">{contact.name[0].toUpperCase()}</div>
+            <div className="info">
+              <section className="head">
+                <h5 className="title">{contact.name}</h5>
+                <h5 className="time">12:25PM</h5>
+              </section>
+              <p className="last-message">{TEST_STRING.slice(0, 38) + '...'}</p>
             </div>
           </div>
         ))}
       </section>
-
-      <Modal
-        isOpen={modalId === ADD_GROUP_MODAL}
-        onClose={() => closeModal(ADD_GROUP_MODAL)}
-        title="New Group"
-      ></Modal>
     </section>
   );
 };
