@@ -3,6 +3,7 @@ import create from 'zustand';
 interface IMessage {
   sender: string;
   message: string;
+  updatedAt: string;
 }
 
 interface IConversationState {

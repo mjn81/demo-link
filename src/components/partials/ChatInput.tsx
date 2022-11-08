@@ -1,9 +1,9 @@
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useUserStore } from 'context';
 import { useMessageStore } from 'context/messageStore';
 import React, { useState } from 'react';
 import { Socket } from 'socket.io-client';
+import SendSvg from 'assets/icons/send-2.svg';
+import EmojiSvg from 'assets/icons/emoji.svg';
 
 export const ChatInput = ({
   recipients,
@@ -21,16 +21,18 @@ export const ChatInput = ({
   const sender = useUserStore(state => state.id);
   const addMessage = useMessageStore(state => state.addMessage);
   const handleSendMessage = () => {
-    if(!message) return;
+    if (!message) return;
     socket.emit('send-message', { roomId, message, sender, recipients });
-    addMessage({ sender, message });
+    addMessage({ sender, message, updatedAt: new Date().toISOString() });
     setMessage('');
     setRows(1);
+    
   };
 
   return (
     <section className="chat-input">
       <textarea
+        autoFocus
         disabled={isLoadingHistory}
         rows={rows}
         value={message}
@@ -52,8 +54,12 @@ export const ChatInput = ({
         }}
         placeholder="Type a message"
       />
-      <button className="send-button" onClick={handleSendMessage}>
-        <FontAwesomeIcon icon={faPaperPlane} />
+
+      <button className="send-button space">
+        <img src={EmojiSvg} alt="send" />
+      </button>
+      <button className="send-button right" onClick={handleSendMessage}>
+        <img src={SendSvg} alt="send" />
       </button>
     </section>
   );
