@@ -5,7 +5,7 @@
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-color: white;
+  background-color: $background;
 }
 
 .login__form {
@@ -15,24 +15,22 @@
   align-items: center;
   width: 100%;
   max-width: 400px;
-  > * {
-    margin-bottom: 1rem;
-  }
-}
 
-.login__container-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  > :first-child {
-    margin-right: 0.5rem;
+  .button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    > :first-child {
+      margin-right: 0.5rem;
+    }
   }
 }
 
 .login__title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 500;
-  color: $primary;
-  text-transform: capitalize;
+  color: $light_grey;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
 }

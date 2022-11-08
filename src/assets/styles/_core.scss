@@ -1,47 +1,60 @@
-input {
+.input-container {
   width: 100%;
-  padding: $basic_padding;
-  font-size: 1rem;
-  border: none;
-  background-color: $white;
+  padding: 0 1rem;
+  background-color: $grey;
   border-radius: $basic_radius;
-  font-weight: 500;
-  color: $black;
-  outline: none !important;
-  ::placeholder {
-    color: $grey;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  img {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
   }
-  &.secondary {
-    background-color: $grey;
-    ::placeholder {
-      color: $dark_grey;
-    }
-    color: $black;
+  input {
+    flex: 1;
+    display: block;
+    border: none;
     outline: none;
+    background-color: inherit;
+    font-size: 1rem;
+    color: $white;
   }
+  ::placeholder {
+    font-weight: 600 !important;
+    color: $light_grey;
+  }
+  // &.secondary {
+  //   background-color: $grey;
+  //   ::placeholder {
+  //     color: $dark_grey;
+  //   }
+  //   color: $black;
+  //   outline: none;
+  // }
 }
 
-button {
+.btn {
+  height: 50px;
   padding: $basic_padding;
+  text-align: center;
   cursor: pointer;
   font-weight: 500;
   font-size: 1rem;
   display: block;
   border-radius: $basic_radius;
   width: 100%;
-  & > a {
-    color: $primary;
-  }
+
   &.primary {
-    background-color: $primary;
-    color: $white;
+    background-color: $grey;
+    color: $extra_light_grey;
     border: none;
     outline: none;
   }
   &.secondary {
-    background-color: $white;
-    color: $primary;
-    border: 1.5px solid $grey;
+    background-color: $background;
+    color: $extra_light_grey;
+    border: 1px solid $light_border;
   }
   &.icon-button {
     padding: 0;
@@ -73,18 +86,6 @@ button {
     text-align: center;
   }
 }
-a.button {
-  color: $primary;
-  font-weight: 500;
-  font-size: 1rem;
-  background-color: $white;
-  border: 1.5px solid $grey;
-  display: block;
-  width: 100%;
-  text-align: center;
-  padding: $basic_padding;
-  border-radius: $basic_radius;
-}
 
 .profile {
   border-radius: 50%;
@@ -94,4 +95,72 @@ a.button {
   height: 2.5rem;
   padding: 0.4rem;
   text-align: center;
+}
+
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.451);
+
+  &.open {
+    display: flex;
+  }
+
+  &.close {
+    display: none;
+  }
+
+  .content {
+    background-color: white;
+    width: 80%;
+    max-height: 80%;
+    min-height: fit-content;
+    border-radius: $basic_radius;
+    box-shadow: 0 0 2px 0px $grey;
+    color: $black;
+    .title {
+      padding: $basic_padding;
+      font-size: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid $grey;
+      h3 {
+        flex: 1;
+        font-weight: 500;
+      }
+      button {
+        width: fit-content;
+        font-size: 1.5rem;
+      }
+    }
+
+    .body {
+      padding: $basic_padding;
+    }
+  }
+}
+
+.form-control {
+  width: 100%;
+  form > * {
+    margin-bottom: 1rem;
+  }
+
+  .form-error {
+    color: $error;
+    font-size: 0.9rem;
+    li {
+      margin-bottom: 0.2rem;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
 }

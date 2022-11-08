@@ -1,3 +1,4 @@
+import { Modal } from 'components';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Chat from './Chat';

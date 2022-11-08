@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faP, faPlus, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import {
+  faMagnifyingGlass,
+  faP,
+  faPlus,
+  faRightFromBracket,
+} from '@fortawesome/free-solid-svg-icons';
 
-import { useContactsQuery } from 'hooks';
+import { useContactsQuery, useModal } from 'hooks';
 import { useContactStore } from 'context';
-import { ButtonProfile, SimpleProfile, MenuOption, ContextMenu } from 'components';
+import { ButtonProfile, SimpleProfile, MenuOption, ContextMenu, Modal } from 'components';
 import { useClearToken, useProfileQuery } from 'hooks';
+
+const ADD_GROUP_MODAL = 'add-group-modal';
 
 export const Sidebar = () => {
   const { data: contacts, isLoading } = useContactsQuery();
@@ -24,13 +31,14 @@ export const Sidebar = () => {
     },
   ];
   const [isOpen, setIsOpen] = useState(false);
+  const { modalId, closeModal, openModal } = useModal();
 
   const setContact = useContactStore(state => state.setContact);
   const currentContact = useContactStore(state => state.contact);
   return (
     <section className="sidebar">
       <section className="self">
-        <section className='avatar'>
+        <section className="avatar">
           <ButtonProfile
             onClick={() => setIsOpen(o => !o)}
             name={profile?.user.username}
@@ -41,12 +49,12 @@ export const Sidebar = () => {
           <h4 className="time">Good Morning</h4>
           <h1 className="name capitalize">{profile?.user.username}</h1>
         </section>
-        <section className='more'>
-          <button className='search circle'>
-            <FontAwesomeIcon icon={faPlus}/>
+        <section className="more">
+          <button className="search circle" onClick={() => openModal(ADD_GROUP_MODAL)}>
+            <FontAwesomeIcon icon={faPlus} />
           </button>
-          <button className='search circle'>
-            <FontAwesomeIcon icon={faMagnifyingGlass}/>
+          <button className="search circle">
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </section>
       </section>
@@ -54,7 +62,9 @@ export const Sidebar = () => {
         {isLoading && <p>Loading...</p>}
         {contacts?.rooms.map(contact => (
           <div
-            className={`sidebar__contact ${currentContact?.id === contact._id && 'active'}`}
+            className={`sidebar__contact ${
+              currentContact?.id === contact._id && 'active'
+            }`}
             key={contact._id}
             onClick={() => {
               setContact({
@@ -72,6 +82,12 @@ export const Sidebar = () => {
           </div>
         ))}
       </section>
+
+      <Modal
+        isOpen={modalId === ADD_GROUP_MODAL}
+        onClose={() => closeModal(ADD_GROUP_MODAL)}
+        title="New Group"
+      ></Modal>
     </section>
   );
 };
