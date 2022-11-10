@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { ChatInput } from 'components';
-import { useContactDetailQuery } from 'hooks';
+import { ChatInput, Message, Modal } from 'components';
+import { useContactDetailQuery, useModal } from 'hooks';
 import { IContact } from 'interfaces';
 import { useSocketStore, useMessageStore, useUserStore } from 'context';
 import { useRoomHistoryQuery } from 'hooks';
 import MoreSvg from 'assets/icons/more.svg';
+import Users from 'assets/icons/profile-2user.svg';
+import EditRoom from 'assets/icons/message-edit.svg';
+
+const GROUP_DETAIL_MODAL = 'GROUP_DETAIL_MODAL';
 
 export const ChatContent = ({ currentContact }: { currentContact: IContact }) => {
   const { data: details, isLoading: isLoadingDetails } = useContactDetailQuery(
@@ -16,10 +20,22 @@ export const ChatContent = ({ currentContact }: { currentContact: IContact }) =>
   const setHistory = useMessageStore(state => state.setHistory);
   const addMessage = useMessageStore(state => state.addMessage);
   const contentRef = useRef<HTMLDivElement>(null);
+  const { modalId, closeModal, openModal } = useModal();
   const userId = useUserStore(state => state.id);
   const { data: history, isLoading: isLoadingHistory } = useRoomHistoryQuery(
     currentContact.id,
   );
+  const [users, setUsers] = useState<any>(null);
+  useEffect(() => {
+    const usr = details?.recipients.reduce((pre, cur) => {
+      return {
+        ...pre,
+        [cur._id]: cur.username,
+      };
+    }, {});
+    setUsers(usr);
+  }, [currentContact.id, isLoadingDetails]);
+
   const scrollToBottom = () => {
     contentRef.current?.scrollIntoView();
   };
@@ -32,7 +48,6 @@ export const ChatContent = ({ currentContact }: { currentContact: IContact }) =>
   useEffect(() => {
     scrollToBottom();
   }, [chat]);
-
   useEffect(() => {
     if (!socket) return;
     socket.on('receive-message', message => {
@@ -42,6 +57,7 @@ export const ChatContent = ({ currentContact }: { currentContact: IContact }) =>
       socket.off('receive-message');
     };
   }, [socket]);
+
   return (
     <main className="chat-area">
       <header className="chat-header">
@@ -50,40 +66,27 @@ export const ChatContent = ({ currentContact }: { currentContact: IContact }) =>
           {details && !details.isConv && <p>{details.recipients.length} memebers</p>}
         </section>
 
-        <img src={MoreSvg} alt="more" />
+        <img
+          src={MoreSvg}
+          alt="more"
+          className="pointer"
+          onClick={() => openModal(GROUP_DETAIL_MODAL)}
+        />
       </header>
-      <div className="wrapper">
-        <section
-          className="chat-content"
-          onScrollCapture={() => {
-            console.log('s');
-          }}
-        >
-          {chat.map(({ message, sender, updatedAt }, index) => {
-            const user = details?.recipients.find(r => r._id === sender);
-            const isMe = sender === userId;
-            return (
-              <div
-                className={`message ${isMe ? 'me' : 'other'}`}
-                key={`${index}_${sender}_${currentContact.id}`}
-              >
-                <div className="header">
-                  <h6 className="sender">{isMe ? '' : user?.username}</h6>
-                  <span className="time">
-                    {updatedAt &&
-                      new Date(updatedAt).toLocaleTimeString('en-US', {
-                        hour: 'numeric',
-                        minute: 'numeric',
-                      })}
-                  </span>
-                </div>
-                <p className="content">{message}</p>
-              </div>
-            );
-          })}
-          <div ref={contentRef}></div>
-        </section>
-      </div>
+
+      <section className="chat-content">
+        {chat.map(({ message, sender, updatedAt }, index) => (
+          <Message
+            me={userId}
+            message={message}
+            sender={sender}
+            updatedAt={updatedAt}
+            users={users}
+            key={`${index}_${sender}`}
+          />
+        ))}
+        <div ref={contentRef}></div>
+      </section>
 
       {socket && (
         <ChatInput
@@ -93,6 +96,34 @@ export const ChatContent = ({ currentContact }: { currentContact: IContact }) =>
           recipients={currentContact.recipients}
         />
       )}
+
+      <Modal
+        header={
+          <section>
+            <h3>{currentContact.name}</h3>
+          </section>
+        }
+        isOpen={modalId === GROUP_DETAIL_MODAL}
+        onClose={() => closeModal(GROUP_DETAIL_MODAL)}
+      >
+        <section className="group-detail">
+          <section className="title">
+            <img src={Users} alt="users" />
+            <h3>Members</h3>
+          </section>
+          <section className="users-list">
+            {details?.recipients.map((user, index) => (
+              <div className="item">
+                <div className="profile">{user.username[0].toUpperCase()}</div>
+                <p>{user.username}</p>
+              </div>
+            ))}
+          </section>
+          <button className="btn primary flex-center">
+            <img src={EditRoom} className="icon" alt="edit-room" /> Edit Room
+          </button>
+        </section>
+      </Modal>
     </main>
   );
 };

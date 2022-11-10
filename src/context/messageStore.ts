@@ -1,6 +1,6 @@
 import create from 'zustand';
 
-interface IMessage {
+export interface IMessage {
   sender: string;
   message: string;
   updatedAt: string;

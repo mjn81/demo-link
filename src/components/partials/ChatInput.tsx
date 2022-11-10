@@ -1,9 +1,11 @@
 import { useUserStore } from 'context';
 import { useMessageStore } from 'context/messageStore';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
 import SendSvg from 'assets/icons/send-2.svg';
 import EmojiSvg from 'assets/icons/emoji.svg';
+import EmojiPicker from 'emoji-picker-react';
+import { Portal } from 'react-portal';
 
 export const ChatInput = ({
   recipients,
@@ -16,32 +18,44 @@ export const ChatInput = ({
   roomId: string;
   recipients: string[];
 }) => {
-  const [message, setMessage] = useState<string>('');
+  // fix input performance overload
+  const message = useRef<HTMLTextAreaElement>(null);
   const [rows, setRows] = useState<number>(1);
   const sender = useUserStore(state => state.id);
   const addMessage = useMessageStore(state => state.addMessage);
   const handleSendMessage = () => {
-    if (!message) return;
-    socket.emit('send-message', { roomId, message, sender, recipients });
-    addMessage({ sender, message, updatedAt: new Date().toISOString() });
-    setMessage('');
+    if (!message.current || !message.current.value) return;
+    socket.emit('send-message', {
+      roomId,
+      message: message.current.value,
+      sender,
+      recipients,
+    });
+    addMessage({
+      sender,
+      message: message.current.value,
+      updatedAt: new Date().toISOString(),
+    });
+    message.current.value = '';
     setRows(1);
-    
   };
-
+  const [emojiOpen, setEmojiOpen] = useState<boolean>(false);
   return (
     <section className="chat-input">
       <textarea
+        ref={message}
         autoFocus
         disabled={isLoadingHistory}
         rows={rows}
-        value={message}
-        onChange={e => setMessage(e.target.value)}
         onKeyDown={e => {
-          if (e.key === 'Backspace') {
-            message?.endsWith('\n') && setRows(prev => prev - 1);
+          if (!message.current) {
+            return;
           }
-          if (message?.length === 0) {
+          const { value } = message.current;
+          if (e.key === 'Backspace') {
+            value.endsWith('\n') && setRows(prev => prev - 1);
+          }
+          if (value.length === 0) {
             setRows(1);
           }
           if (e.key === 'Enter' && e.shiftKey) {
@@ -54,10 +68,17 @@ export const ChatInput = ({
         }}
         placeholder="Type a message"
       />
+      <section className="send-button emoji">
+        <div className={`emoji-picker ${emojiOpen ? 'open' : 'close'}`}>
+          <EmojiPicker
+            onEmojiClick={e => {
+              message.current!.value += e.emoji;
+            }}
+          />
+        </div>
 
-      <button className="send-button space">
-        <img src={EmojiSvg} alt="send" />
-      </button>
+        <img src={EmojiSvg} alt="send" onClick={() => setEmojiOpen(em => !em)} />
+      </section>
       <button className="send-button right" onClick={handleSendMessage}>
         <img src={SendSvg} alt="send" />
       </button>
