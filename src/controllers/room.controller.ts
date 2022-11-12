@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { BaseError } from "../errors";
 import { userAuth } from "../helpers";
 import { IAddRecipientDto, IRoom } from "../interfaces";
-import { Room, User } from "../models";
+import { Message, Room, User } from "../models";
 import { roomService } from "../services";
 
 export class RoomController {
@@ -44,9 +44,26 @@ export class RoomController {
     const user = await userAuth(req.user);
 
     const rooms = await Room.find({ recipients: user._id });
-    return res.status(200).json({ rooms });
+    const response: { room: {}, lastMessage: any }[] = [];
+    for (let i = 0; i < rooms.length; i++) {
+      const id = rooms[i]._id;
+      const lastMessage = await Message.findOne({
+        room_id: id,
+      }).sort({ createdAt: -1 });
+      response.push({ room: rooms[i], lastMessage });
+    }
+    return res.status(200).json({ response });
   }
 
+  public async getRoomHistory(req: Request, res: Response) {
+    await userAuth(req.user);
+    const { id: roomId } = req.params;
+    const history = await Message.find({
+      room_id: roomId,
+    }); 
+    return res.status(200).json(history);
+  }
+  
   public async getRoomsByName(req: Request, res: Response) {
     await userAuth(req.user);
     const { name: roomName } = req.query;

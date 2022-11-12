@@ -12,5 +12,5 @@ router.get('/:id', roomController.getRoomById);
 router.put('/:id', roomController.addRecipient);
 router.delete('/:id', roomController.removeRecipient);
 router.put('/name/:id', roomController.changeRoomName);
-
+router.get('/history/:id', roomController.getRoomHistory);
 export const roomRouter = router;

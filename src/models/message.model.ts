@@ -7,7 +7,7 @@ const message = new Schema(
 			type: String,
 			default: uuidv4,
 		},
-		text: String,
+		message: String,
 		sender: {
 			type: String,
 			ref: 'User',

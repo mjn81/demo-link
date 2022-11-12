@@ -15,10 +15,15 @@ export const userAuthMiddleware = async (
   const [bearer , tokenValue]= extractToken(token);
 
   if (!process.env.JWT_SECRET) throw new Error("JWT Secret not found");
-  const payload: IUserPayload = jwt.verify(
-    tokenValue,
-    process.env.JWT_SECRET
-  ) as IUserPayload;
+  let payload: IUserPayload | null = null;
+  try {
+    payload = jwt.verify(
+      tokenValue,
+      process.env.JWT_SECRET
+    ) as IUserPayload;
+  } catch (error) {
+    return next();
+  }
   if (!payload) return next();
 
   req.user = {
