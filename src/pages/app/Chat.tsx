@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 
 import { Sidebar, Sidenav } from 'components';
 import { useProfileQuery, useSetToken } from 'hooks';
-import { useAuthStore, useContactStore, useSocketStore } from 'context';
+import { useAuthStore, useRoomStore, useSocketStore } from 'context';
 import { createSocket } from 'utils/socket';
 import { ChatContent } from './ChatContent';
 
 const Chat = () => {
   useSetToken();
   const { data: userProfile } = useProfileQuery();
-  const contact = useContactStore(state => state.contact);
+  const contact = useRoomStore(state => state.contact);
   const setSocket = useSocketStore(state => state.setSocket);
   const token = useAuthStore(state => state.token);
   useEffect(() => {
@@ -26,7 +26,7 @@ const Chat = () => {
       <Sidenav />
       <Sidebar />
       <section className="chat-container">
-        {contact && <ChatContent currentContact={contact} />}
+        {contact && <ChatContent currentRoom={contact} />}
       </section>
     </div>
   );

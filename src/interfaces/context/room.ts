@@ -1,4 +1,4 @@
-export interface IContact {
+export interface IRoom {
   id: string;
   name: string;
   isConv: boolean;
@@ -6,7 +6,7 @@ export interface IContact {
 }
 
 export interface IContactState {
-  contact: IContact | null;
-  setContact: (room: IContact) => void;
+  contact: IRoom | null;
+  setContact: (room: IRoom) => void;
   clearContact: () => void;
 }

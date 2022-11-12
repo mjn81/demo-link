@@ -2,29 +2,32 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { ChatInput, Message, Modal } from 'components';
 import { useContactDetailQuery, useModal } from 'hooks';
-import { IContact } from 'interfaces';
-import { useSocketStore, useMessageStore, useUserStore } from 'context';
+import { IRoom } from 'interfaces';
+import { useSocketStore, useMessageStore, useUserStore, useRoomListStore } from 'context';
 import { useRoomHistoryQuery } from 'hooks';
 import MoreSvg from 'assets/icons/more.svg';
 import Users from 'assets/icons/profile-2user.svg';
 import EditRoom from 'assets/icons/message-edit.svg';
+import { firstLetterToUpperCase } from 'utils/string';
 
 const GROUP_DETAIL_MODAL = 'GROUP_DETAIL_MODAL';
 
-export const ChatContent = ({ currentContact }: { currentContact: IContact }) => {
+export const ChatContent = ({ currentRoom }: { currentRoom: IRoom }) => {
   const { data: details, isLoading: isLoadingDetails } = useContactDetailQuery(
-    currentContact.id,
+    currentRoom.id,
   );
   const socket = useSocketStore(state => state.socket);
   const chat = useMessageStore(state => state.chat);
   const setHistory = useMessageStore(state => state.setHistory);
   const addMessage = useMessageStore(state => state.addMessage);
+  const updateLastMessage = useRoomListStore(state => state.updateLastMessage);
   const contentRef = useRef<HTMLDivElement>(null);
   const { modalId, closeModal, openModal } = useModal();
   const userId = useUserStore(state => state.id);
   const { data: history, isLoading: isLoadingHistory } = useRoomHistoryQuery(
-    currentContact.id,
+    currentRoom.id,
   );
+
   const [users, setUsers] = useState<any>(null);
   useEffect(() => {
     const usr = details?.recipients.reduce((pre, cur) => {
@@ -34,7 +37,7 @@ export const ChatContent = ({ currentContact }: { currentContact: IContact }) =>
       };
     }, {});
     setUsers(usr);
-  }, [currentContact.id, isLoadingDetails]);
+  }, [currentRoom.id, isLoadingDetails]);
 
   const scrollToBottom = () => {
     contentRef.current?.scrollIntoView();
@@ -43,7 +46,7 @@ export const ChatContent = ({ currentContact }: { currentContact: IContact }) =>
   useEffect(() => {
     if (isLoadingHistory) return;
     setHistory(history);
-  }, [isLoadingHistory, currentContact.id]);
+  }, [isLoadingHistory, currentRoom.id]);
 
   useEffect(() => {
     scrollToBottom();
@@ -52,6 +55,7 @@ export const ChatContent = ({ currentContact }: { currentContact: IContact }) =>
     if (!socket) return;
     socket.on('receive-message', message => {
       addMessage(message);
+      updateLastMessage(currentRoom.id, message);
     });
     return () => {
       socket.off('receive-message');
@@ -62,7 +66,7 @@ export const ChatContent = ({ currentContact }: { currentContact: IContact }) =>
     <main className="chat-area">
       <header className="chat-header">
         <section className="info">
-          <h2>{currentContact.name}</h2>
+          <h2>{currentRoom.name}</h2>
           {details && !details.isConv && <p>{details.recipients.length} memebers</p>}
         </section>
 
@@ -91,16 +95,16 @@ export const ChatContent = ({ currentContact }: { currentContact: IContact }) =>
       {socket && (
         <ChatInput
           isLoadingHistory={isLoadingHistory}
-          roomId={currentContact.id}
+          roomId={currentRoom.id}
           socket={socket}
-          recipients={currentContact.recipients}
+          recipients={currentRoom.recipients}
         />
       )}
 
       <Modal
         header={
           <section>
-            <h3>{currentContact.name}</h3>
+            <h3>{currentRoom.name}</h3>
           </section>
         }
         isOpen={modalId === GROUP_DETAIL_MODAL}
@@ -113,8 +117,8 @@ export const ChatContent = ({ currentContact }: { currentContact: IContact }) =>
           </section>
           <section className="users-list">
             {details?.recipients.map((user, index) => (
-              <div className="item">
-                <div className="profile">{user.username[0].toUpperCase()}</div>
+              <div className="item" key={`usr_info_${index}`}>
+                <div className="profile">{firstLetterToUpperCase(user.username)}</div>
                 <p>{user.username}</p>
               </div>
             ))}

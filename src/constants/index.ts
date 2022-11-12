@@ -1,0 +1,1 @@
+export const LENGTH_TO_MESSAGE = 38;

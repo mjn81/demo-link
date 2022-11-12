@@ -1,3 +1,5 @@
+import { IMessage } from "context";
+
 interface IRoom {
   _id: string;
   name: string;
@@ -11,7 +13,7 @@ export interface IRecipient {
 }
 
 export interface IGetContactListRes {
-  rooms: IRoom[];
+  response: {room: IRoom, lastMessage?: IMessage}[];
 }
 
 export interface IGetContactDetailRes {

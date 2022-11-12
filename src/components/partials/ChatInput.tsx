@@ -1,4 +1,4 @@
-import { useUserStore } from 'context';
+import { useRoomListStore, useUserStore } from 'context';
 import { useMessageStore } from 'context/messageStore';
 import React, { useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
@@ -19,6 +19,7 @@ export const ChatInput = ({
   recipients: string[];
 }) => {
   // fix input performance overload
+  const updateLastMessage = useRoomListStore(state => state.updateLastMessage);
   const message = useRef<HTMLTextAreaElement>(null);
   const [rows, setRows] = useState<number>(1);
   const sender = useUserStore(state => state.id);
@@ -32,6 +33,11 @@ export const ChatInput = ({
       recipients,
     });
     addMessage({
+      sender,
+      message: message.current.value,
+      updatedAt: new Date().toISOString(),
+    });
+    updateLastMessage(roomId, {
       sender,
       message: message.current.value,
       updatedAt: new Date().toISOString(),

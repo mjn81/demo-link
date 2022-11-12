@@ -26,6 +26,7 @@ export const Sidenav = () => {
 
   const { pathname } = useLocation();
   const username = useUserStore(state => state.username);
+  
   return (
     <div className="sidenav">
       <div></div>
